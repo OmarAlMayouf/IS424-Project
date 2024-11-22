@@ -77,3 +77,8 @@ def delete_product(request, id):
         product.delete()
         return redirect('read_product')
     return render(request, 'pharmacy/delete_product.html', {'product': product})
+
+@login_required
+def view_product(request, id):
+    product = get_object_or_404(Product, id=id)
+    return render(request, 'pharmacy/view_product.html', {'product': product})

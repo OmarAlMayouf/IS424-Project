@@ -1,30 +1,42 @@
 {% extends 'pharmacy/base.html' %}
+{% load static %}
 {% block content %}
-    <h1>Product List</h1>
-    <a href="/create/" class="btn btn-success mb-3">Create Product</a>
+    <!--<h1>Medicines List</h1>-->
     <table class="table">
         <thead>
-            <tr>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Stock</th>
-                <th>Expiration Date</th>
-                <th>Actions</th>
-            </tr>
+          <tr>
+            <th scope="col"><h1>Medicines List</h1></th>
+            <th scope="col">
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-danger" type="submit">Search</button>
+                </form>
+            </th>
+            
+          </tr>
         </thead>
         <tbody>
-            {% for product in products %}
             <tr>
-                <td>{{ product.name }}</td>
-                <td>${{ product.price }}</td>
-                <td>{{ product.quantity }}</td>
-                <td>{{ product.expiration_date }}</td>
-                <td>
-                    <a href="{% url 'update_product' product.id %}" class="btn btn-warning">Update</a>
-                    <a href="{% url 'delete_product' product.id %}" class="btn btn-danger">Delete</a>
+                <td class="d-flex flex-wrap">
+                    {% if products %}
+                        {% for product in products %}
+                        <div class="card m-3" style="width: 18rem;">
+                            <img class="card-img-top" src="{% static 'images/panadol.png' %}" alt="Card Image">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ product.name }}</h5>
+                                <a href="{% url 'view_product' product.id %}" class="btn btn-danger">View</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>You have no medicines yet. Add one <a class="text-danger" href="{% url 'create_product' %}">here</a></p>
+                    {% endif %}
                 </td>
             </tr>
-            {% endfor %}
         </tbody>
-    </table>
+      </table>
+
+    
+    
+
 {% endblock %}

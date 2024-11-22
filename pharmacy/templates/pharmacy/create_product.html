@@ -24,7 +24,12 @@
         <label for="expiration_date" class="form-label">Expiration Date</label>
         <input type="date" id="expiration_date" name="expiration_date" class="form-control" required>
     </div>
-    <button type="submit" class="btn btn-primary">Create Product</button>
+    <div class="mb-3">
+        <label class="form-label" for="Photo">Photo</label>
+        <input type="file" class="form-control" id="Photo" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Create Product</button>
     <a href="{% url 'read_product' %}" class="btn btn-secondary">Cancel</a>
 </form>
 {% endblock %}
