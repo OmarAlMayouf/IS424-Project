@@ -1,0 +1,30 @@
+{% extends 'pharmacy/base.html' %}
+{% block content %}
+    <h1>Product List</h1>
+    <a href="/create/" class="btn btn-success mb-3">Create Product</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Expiration Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>${{ product.price }}</td>
+                <td>{{ product.quantity }}</td>
+                <td>{{ product.expiration_date }}</td>
+                <td>
+                    <a href="{% url 'update_product' product.id %}" class="btn btn-warning">Update</a>
+                    <a href="{% url 'delete_product' product.id %}" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
