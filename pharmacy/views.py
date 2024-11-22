@@ -82,3 +82,24 @@ def delete_product(request, id):
 def view_product(request, id):
     product = get_object_or_404(Product, id=id)
     return render(request, 'pharmacy/view_product.html', {'product': product})
+
+@login_required
+def search_medicines(request):
+    """
+    View to handle medicine search functionality.
+    Returns only the names of the medicines matching the query (case-insensitive).
+    """
+    query = request.GET.get('query', '').strip()  # Get and clean the search query
+    results = []
+
+    if query:
+        # Perform a case-insensitive search and retrieve required fields
+        results = Product.objects.filter(
+            name__icontains=query
+        ).values('id', 'name', 'description', 'price') # Fetch all matching objects
+        print(results)
+    context = {
+        'query': query,
+        'results': results,  # Full Medicine objects for template use
+    }
+    return render(request, 'pharmacy/search_medicine.html', context)

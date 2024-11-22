@@ -1,0 +1,38 @@
+{% extends 'pharmacy/base.html' %}
+{% load static %}
+{% block content %}
+<h1>Search Results for "{{ query }}"</h1>
+
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">
+            <div class="mt-5 d-flex justify-content-left">
+            <a href="{% url 'read_product' %}" class="btn btn-secondary">Back</a>
+            </div>
+    </th>
+        <th scope="col">
+            <form class="d-flex" role="search" method="GET" action="{% url 'search_medicines' %}">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="query">
+                <button class="btn btn-outline-danger" type="submit">Search</button>
+            </form>
+        </th>
+        
+      </tr>
+    </thead>
+</table>
+{% if results %}
+    {% for medicine in results %}
+    <div class="card m-3" style="width: 18rem;">
+        <img class="card-img-top" src="{% static 'images/panadol.png' %}" alt="Card Image">
+        <div class="card-body">
+            <h5 class="card-title">{{ medicine.name }}</h5>
+            <a href="{% url 'view_product' medicine.id %}" class="btn btn-danger">View</a>
+        </div>
+    </div>
+   
+    {% endfor %}
+{% else %}
+    <p>No results found.</p>
+{% endif %}
+{% endblock %}
