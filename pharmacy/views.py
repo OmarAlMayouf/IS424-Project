@@ -47,12 +47,14 @@ def create_product(request):
         price = request.POST['price']
         stock_quantity = request.POST['stock_quantity']
         expiration_date = request.POST['expiration_date']
+        picture = request.POST['url']
         Product.objects.create(
             name=name,
             description=description,
             price=price,
             quantity=stock_quantity,
             expiration_date=expiration_date,
+            picture=picture,
         )
         return redirect('read_product')
     return render(request, 'pharmacy/create_product.html')
@@ -96,10 +98,10 @@ def search_medicines(request):
         # Perform a case-insensitive search and retrieve required fields
         results = Product.objects.filter(
             name__icontains=query
-        ).values('id', 'name', 'description', 'price') # Fetch all matching objects
+        ).values('id', 'name','picture')
         print(results)
     context = {
         'query': query,
-        'results': results,  # Full Medicine objects for template use
+        'results': results,  
     }
     return render(request, 'pharmacy/search_medicine.html', context)

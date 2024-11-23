@@ -1,11 +1,12 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Pharmaseek</title>
+    <link type="image/png" sizes="16x16" rel="icon" href="{% static 'images/icons8-medicine-16.png'%}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
-<body>
-    
+<body> 
     <nav class="d-flex justify-content-between navbar navbar-expand-lg navbar-dark bg-danger">
         <a class="ms-5 navbar-brand" href="{% url 'read_product' %}">
             <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24"><path fill="currentColor" d="M6 19h3.692v-5.884h4.616V19H18v-9l-6-4.538L6 10zm-1 1V9.5l7-5.288L19 9.5V20h-5.692v-5.884h-2.616V20zm7-7.77"/></svg>
@@ -20,7 +21,6 @@
             <span class="align-middle">Profile</span>
         </a>
     </nav>
-    
     <div class="container mt-4">
         {% block content %}
         {% endblock %}
