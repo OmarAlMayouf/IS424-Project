@@ -68,6 +68,7 @@ def update_product(request, id):
         product.price = request.POST['price']
         product.quantity = request.POST['stock_quantity']
         product.expiration_date = request.POST['expiration_date']
+        product.picture = request.POST['url']
         product.save()
         return redirect('read_product')
     return render(request, 'pharmacy/update_product.html', {'product': product})

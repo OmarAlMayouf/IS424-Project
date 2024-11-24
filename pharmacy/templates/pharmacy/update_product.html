@@ -1,11 +1,11 @@
 {% extends 'pharmacy/base.html' %}
 
 {% block content %}
-<h1>Update Product</h1>
+<h1>Update Medicine</h1>
 <form method="POST" class="mt-3">
     {% csrf_token %}
     <div class="mb-3">
-        <label for="name" class="form-label">Product Name</label>
+        <label for="name" class="form-label">Medicine Name</label>
         <input type="text" id="name" name="name" class="form-control" value="{{ product.name }}" required>
     </div>
     <div class="mb-3">
@@ -18,17 +18,18 @@
     </div>
     <div class="mb-3">
         <label for="stock_quantity" class="form-label">Stock Quantity</label>
-        <input type="number" id="stock_quantity" name="stock_quantity" class="form-control" value="{{ product.stock_quantity }}" required>
+        <input type="number" id="stock_quantity" name="stock_quantity" class="form-control" value="{{ product.quantity }}" required>
     </div>
     <div class="mb-3">
         <label for="expiration_date" class="form-label">Expiration Date</label>
-        <input type="date" id="expiration_date" name="expiration_date" class="form-control" value="{{ product.expiration_date }}" required>
+        <input type="date" id="expiration_date" name="expiration_date" class="form-control" value="{{ product.expiration_date|date:'Y-m-d' }}" required>
     </div>
     <div class="mb-3">
-        <label class="form-label" for="Photo">Photo</label>
-        <input type="file" class="form-control" id="Photo" />
+        <label for="url" class="form-label">Medicine Picture URL</label>
+        <input type="text" id="url" name="url" class="form-control" required value="{{ product.picture }}">
     </div>
+
     <button type="submit" class="btn btn-warning">Save Changes</button>
-    <a href="{% url 'view_product' product.id %}" class="btn btn-secondary">Cancel</a>
+    <a href="{% url 'view_product' product.id %}" class="btn btn-danger">Cancel</a>
 </form>
 {% endblock %}
