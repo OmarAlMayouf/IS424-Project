@@ -10,13 +10,13 @@
     phone number
     -->
     <title>Pharmaseek</title>
-    <link type="image/png" sizes="16x16" rel="icon" href="{% static 'images/icons8-medicine-16.png'%}">
+    <link type="image/png" sizes="16x16" rel="icon" href="{% static 'images/favicon.png'%}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body>
     <div class="container vh-100 d-flex justify-content-center align-items-center">
         <div class="col-3 text-center">
-            <img src="{% static 'images/Logo2.png' %}" alt="Logo" class="img-fluid h-25 w-25 mb-5">
+            <img src="{% static 'images/mainIcon.png' %}" alt="Logo" class="img-fluid h-25 w-25 mb-5">
             <h1 class="fw-medium fs-2">Create an account</h1>
             <form method="POST" class="mt-4">
                 {% csrf_token %}

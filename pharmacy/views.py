@@ -34,12 +34,12 @@ def logout_view(request):
     logout(request)
     return redirect('login')
 
-@login_required
+#@login_required
 def read_product(request):
     products = Product.objects.all()
     return render(request, 'pharmacy/read_product.html', {'products': products})
 
-@login_required
+#@login_required
 def create_product(request):
     if request.method == 'POST':
         name = request.POST['name']
@@ -59,7 +59,7 @@ def create_product(request):
         return redirect('read_product')
     return render(request, 'pharmacy/create_product.html')
 
-@login_required
+#@login_required
 def update_product(request, id):
     product = get_object_or_404(Product, id=id)
     if request.method == 'POST':
@@ -73,7 +73,7 @@ def update_product(request, id):
         return redirect('read_product')
     return render(request, 'pharmacy/update_product.html', {'product': product})
 
-@login_required
+#@login_required
 def delete_product(request, id):
     product = get_object_or_404(Product, id=id)
     if request.method == 'POST':
@@ -81,12 +81,12 @@ def delete_product(request, id):
         return redirect('read_product')
     return render(request, 'pharmacy/delete_product.html', {'product': product})
 
-@login_required
+#@login_required
 def view_product(request, id):
     product = get_object_or_404(Product, id=id)
     return render(request, 'pharmacy/view_product.html', {'product': product})
 
-@login_required
+#@login_required
 def search_medicines(request):
     """
     View to handle medicine search functionality.
