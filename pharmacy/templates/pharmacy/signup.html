@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
+
 <head>
     <!--
     email
@@ -13,6 +14,7 @@
     <link type="image/png" sizes="16x16" rel="icon" href="{% static 'images/favicon.png'%}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
+
 <body>
     <div class="container vh-100 d-flex justify-content-center align-items-center">
         <div class="col-3 text-center">
@@ -44,6 +46,77 @@
             </form>
             <p class="text-center mt-3 text-body-secondary">Already have an account? <a href="{% url 'login' %}" class=" text-dark fw-medium">Sign In</a></p>
         </div>
-    </div>  
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.querySelector("form");
+
+            function checkhName(name) {
+                const nameRegex = /^[A-Za-z\s]+$/;
+                return nameRegex.test(name);
+            }
+
+            function checkEmail(email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(email);
+            }
+
+            function checkPhone(phone) {
+                const phoneRegex = /^[0-9]{10}$/;
+                return phoneRegex.test(phone);
+            }
+
+            form.addEventListener("submit", function(event) {
+                event.preventDefault();
+
+                const name = document.getElementById("floatingName").value.trim();
+                const email = document.getElementById("floatingEmail").value.trim();
+                const phone = document.getElementById("floatingPhone").value.trim();
+                const password = document.getElementById("floatingPassword").value.trim();
+                const confirmPassword = document.getElementById("floatingConfirmPassword").value.trim();
+
+                if (!name) {
+                    alert("Name is required!");
+                    return;
+                }
+                if (!checkhName(name)) {
+                    alert("Please use English language!");
+                    return;
+                }
+                if (!email) {
+                    alert("Email is required!");
+                    return;
+                }
+                if (!checkEmail(email)) {
+                    alert("Please enter a valid email address!");
+                    return;
+                }
+                if (!phone) {
+                    alert("Phone number is required!");
+                    return;
+                }
+                if (!checkPhone(phone)) {
+                    alert("Please enter a valid 10-digit phone number!");
+                    return;
+                }
+                if (!password) {
+                    alert("Password is required!");
+                    return;
+                }
+                if (password.length < 8) {
+                    alert("Password must be at least 8 characters long!");
+                    return;
+                }
+                if (password !== confirmPassword) {
+                    alert("Passwords do not match!");
+                    return;
+                }
+
+                alert("The form is submitted!");
+                form.submit();
+            });
+        });
+    </script>
 </body>
+
 </html>
