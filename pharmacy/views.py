@@ -3,7 +3,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .models import Product
-
+from .models import PharmacyInstance
 # Create your views here.
 
 def signup(request):
@@ -17,17 +17,39 @@ def signup(request):
         form = UserCreationForm()
     return render(request, 'pharmacy/signup.html', {'form': form})
 
-def login_view(request):
+def login_view(request): 
     if request.method == 'POST':
-        form = AuthenticationForm(data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            next_url = request.GET.get('next', 'read_product')
-            return redirect(next_url)
+        print("cptn")
+        
+        print("aka12")
+        pharmacy_name = request.POST['name']  
+        password = request.POST["password"]
+        
+    
+        try:
+            print("9797")
+            pharmacy = PharmacyInstance.objects.get(names=pharmacy_name)
+
+            if pharmacy.password == password :
+                # Login successful, redirect to a protected page
+                request.session['pharmacy_id'] = pharmacy.phonenumber  # Store pharmacy in the session
+                login(request, user)
+                next_url = request.GET.get('next', 'read_product')
+                return redirect(next_url)
+            else:
+                return render(request, 'pharmacy/login.html', {
+                    'error': 'Invalid password. Please try again.'
+                })
+
+
+        except PharmacyInstance.DoesNotExist:
+            return render(request, 'pharmacy/login.html', {
+                'error': 'Pharmacy not found.'
+            })
+
+
     else:
-        form = AuthenticationForm()
-    return render(request, 'pharmacy/login.html', {'form': form})
+        return render(request, 'pharmacy/login.html')
 
 
 def logout_view(request):

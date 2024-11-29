@@ -1,31 +1,38 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>PharmaHub-SignIn</title>
     <link type="image/png" sizes="16x16" rel="icon" href="{% static 'images/favicon.png'%}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
+
 <body>
+
     <div class="container vh-100 d-flex justify-content-center align-items-center">
         <div class="col-3 text-center">
             <img src="{% static 'images/mainIcon.png' %}" alt="" class="img-fluid h-25 w-25 mb-5">
             <h1 class="fw-medium fs-2">Welcome Back</h1>
-            <form method="POST" class="mt-4">
+
+            <form method="POST" action="{% url 'login' %}" class="mt-4">
                 {% csrf_token %}
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="floatingName" placeholder="Pharmacy Name" required>
+                    <input type="text" class="form-control" id="floatingName" name="name" placeholder="Pharmacy Name" required>
                     <label for="floatingName">Pharmacy Name</label>
                 </div>
                 <div class="form-floating mb-4">
-                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password" required>
+                    <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password" required>
                     <label for="floatingPassword">Password</label>
                 </div>
                 <button type="submit" class="btn btn-dark w-100 py-3 mt-2">Continue</button>
+                <p>{{ error }}</p>
+
             </form>
             <p class="text-center mt-3 text-body-secondary">Don't have an account? <a href="{% url 'signup' %}" class=" text-dark fw-medium">Sign Up</a></p>
             <a href="{% url 'read_product' %}">BACKDOOR TEST</a>
         </div>
     </div>
 </body>
+
 </html>
