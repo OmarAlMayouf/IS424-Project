@@ -1,21 +1,30 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
-from .models import Product
-
-# Create your views here.
-
+from .models import *
+#Placeholder for your comment
 def signup(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('read_product')
-    else:
-        form = UserCreationForm()
-    return render(request, 'pharmacy/signup.html', {'form': form})
+        names = request.POST.get('names')
+        email = request.POST.get('email')
+        phonenumber = request.POST.get('phonenumber')
+        password = request.POST.get('password')
+
+      
+
+        PharmacyInstance.objects.create(
+            names=names,
+            email=email,
+            phonenumber=phonenumber,
+            password=password
+        )
+        
+        return redirect('read_product')
+
+    return render(request, 'pharmacy/signup.html')
+
+
 
 def login_view(request):
     if request.method == 'POST':

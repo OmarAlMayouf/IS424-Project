@@ -16,32 +16,32 @@
             <form method="POST" class="mt-4">
                 {% csrf_token %}
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="floatingName" placeholder="Pharmacy Name">
+                    <input type="text" class="form-control" id="floatingName" name="names" placeholder="Pharmacy Name">
                     <label for="floatingName">Pharmacy Name</label>
                     <div class="invalid-feedback d-none"></div>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="email" class="form-control" id="floatingEmail" placeholder="Pharmacy Email">
+                    <input type="email" class="form-control" id="floatingEmail" name="email" placeholder="Pharmacy Email">
                     <label for="floatingEmail">Pharmacy Email</label>
                     <div class="invalid-feedback d-none"></div>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="tel" class="form-control" id="floatingPhone" placeholder="Phone Number">
+                    <input type="tel" class="form-control" id="floatingPhone" name="phonenumber" placeholder="Phone Number">
                     <label for="floatingPhone">Phone Number</label>
                     <div class="invalid-feedback d-none"></div>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                    <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password">
                     <label for="floatingPassword">Password</label>
                     <div class="invalid-feedback d-none"></div>
                 </div>
                 <div class="form-floating mb-4">
-                    <input type="password" class="form-control" id="floatingConfirmPassword" placeholder="Confirm Password">
+                    <input type="password" class="form-control" id="floatingConfirmPassword" name="confirm_password" placeholder="Confirm Password">
                     <label for="floatingConfirmPassword">Confirm Password</label>
                     <div class="invalid-feedback d-none"></div>
-                </div>                
+                </div>
                 <button type="submit" class="btn btn-dark w-100 py-3 mt-2">Continue</button>
-            </form>
+            </form>            
             <p class="text-center mt-3 text-body-secondary">Already have an account? <a href="{% url 'login' %}" class=" text-dark fw-medium">Sign In</a></p>
         </div>
     </div>
