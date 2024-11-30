@@ -12,55 +12,35 @@ def signup(request):
         phonenumber = request.POST.get('phonenumber')
         password = request.POST.get('password')
 
-      
-
         PharmacyInstance.objects.create(
             names=names,
             email=email,
             phonenumber=phonenumber,
             password=password
         )
-        
         return redirect('read_product')
-
     return render(request, 'pharmacy/signup.html')
-
-
 
 def login_view(request): 
     if request.method == 'POST':
-        print("cptn")
-        
-        print("aka12")
         pharmacy_name = request.POST['name']  
         password = request.POST["password"]
-        
-    
         try:
-            print("9797")
             pharmacy = PharmacyInstance.objects.get(names=pharmacy_name)
-
             if pharmacy.password == password :
                 # Login successful, redirect to a protected page
                 request.session['pharmacy_id'] = pharmacy.phonenumber  # Store pharmacy in the session
-                login(request)
-                next_url = request.GET.get('next', 'read_product')
-                return redirect(next_url)
+                return redirect('read_product')
             else:
                 return render(request, 'pharmacy/login.html', {
-                    'error': 'Invalid password. Please try again.'
+                    'error': 'Invalid Name or password. Please try again.'
                 })
-
-
         except PharmacyInstance.DoesNotExist:
             return render(request, 'pharmacy/login.html', {
-                'error': 'Pharmacy not found.'
+                'error': 'Invalid Name or password. Please try again.'
             })
-
-
     else:
         return render(request, 'pharmacy/login.html')
-
 
 def logout_view(request):
     logout(request)
