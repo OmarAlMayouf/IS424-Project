@@ -11,17 +11,32 @@ def signup(request):
         email = request.POST.get('email')
         phonenumber = request.POST.get('phonenumber')
         password = request.POST.get('password')
+        
+        email_error = None
+        phone_error = None
 
+        if PharmacyInstance.objects.filter(email=email).exists():
+            email_error = 'This email is already registered.'
+
+        if PharmacyInstance.objects.filter(phonenumber=phonenumber).exists():
+            phone_error = 'This phone number is already registered.'
+
+        if email_error or phone_error:
+            return render(request, 'pharmacy/signup.html', {
+                'email_error': email_error,
+                'phone_error': phone_error,
+            })
+            
         PharmacyInstance.objects.create(
             names=names,
             email=email,
             phonenumber=phonenumber,
             password=password
         )
-        return redirect('read_product')
+        return redirect('login')
     return render(request, 'pharmacy/signup.html')
 
-def login_view(request): 
+def login_view(request):
     if request.method == 'POST':
         pharmacy_name = request.POST['name']  
         password = request.POST["password"]
@@ -33,14 +48,12 @@ def login_view(request):
                 return redirect('read_product')
             else:
                 return render(request, 'pharmacy/login.html', {
-                    'error': 'Invalid Name or password. Please try again.'
-                })
+                    'error': 'Invalid Name or password. Please try again.'})
         except PharmacyInstance.DoesNotExist:
             return render(request, 'pharmacy/login.html', {
-                'error': 'Invalid Name or password. Please try again.'
-            })
+                'error': 'Invalid Name or password. Please try again.'})
     else:
-        return render(request, 'pharmacy/login.html')
+        return render(request, 'pharmacy/login.html', {'error': None})
 
 def logout_view(request):
     logout(request)

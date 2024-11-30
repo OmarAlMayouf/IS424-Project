@@ -21,14 +21,20 @@
                     <div class="invalid-feedback d-none"></div>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="email" class="form-control" id="floatingEmail" name="email" placeholder="Pharmacy Email">
+                    <input type="text" class="form-control" id="floatingEmail" name="email" placeholder="Pharmacy Email">
                     <label for="floatingEmail">Pharmacy Email</label>
                     <div class="invalid-feedback d-none"></div>
+                    {% if email_error %}
+                        <div class="invalid-feedback d-block" id="email-error">{{ email_error }}</div>
+                    {% endif %}
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="tel" class="form-control" id="floatingPhone" name="phonenumber" placeholder="Phone Number">
+                    <input type="text" class="form-control" id="floatingPhone" name="phonenumber" placeholder="Phone Number">
                     <label for="floatingPhone">Phone Number</label>
                     <div class="invalid-feedback d-none"></div>
+                    {% if phone_error %}
+                        <div class="invalid-feedback d-block" id="phone-error">{{ phone_error }}</div>
+                    {% endif %}
                 </div>
                 <div class="form-floating mb-3">
                     <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password">
@@ -48,7 +54,23 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const form = document.querySelector("form");
-    
+            const phoneErrorDiv = document.getElementById("phone-error");
+            const emailErrorDiv = document.getElementById("email-error");
+
+            if (emailErrorDiv) {
+                const emailInput = document.getElementById("floatingEmail");
+                emailInput.addEventListener("input", function () {
+                    emailErrorDiv.textContent = "";
+                    emailErrorDiv.classList.add("d-none");
+                });
+            }
+            if (phoneErrorDiv) {
+                const phoneInput = document.getElementById("floatingPhone");
+                phoneInput.addEventListener("input", function () {
+                    phoneErrorDiv.textContent = "";
+                    phoneErrorDiv.classList.add("d-none");
+                });
+            }
             function removeError(input) {
                 input.classList.remove("is-invalid");
                 const parent = input.parentElement;

@@ -18,20 +18,85 @@
             <form method="POST" action="{% url 'login' %}" class="mt-4">
                 {% csrf_token %}
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="floatingName" name="name" placeholder="Pharmacy Name" required>
+                    <input type="text" class="form-control" id="floatingName" name="name" placeholder="Pharmacy Name">
                     <label for="floatingName">Pharmacy Name</label>
+                    <div class="invalid-feedback d-none"></div>
                 </div>
                 <div class="form-floating mb-4">
-                    <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password" required>
+                    <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password">
                     <label for="floatingPassword">Password</label>
+                    <div class="invalid-feedback d-none"></div>
                 </div>
                 <button type="submit" class="btn btn-dark w-100 py-3 mt-2">Continue</button>
-                <p>{{ error }}</p>
-
+                {% if error %}
+                    <div class="mt-3 invalid-feedback d-block" id="error">{{ error }}</div>
+                {% endif %}
             </form>
             <p class="text-center mt-3 text-body-secondary">Don't have an account? <a href="{% url 'signup' %}" class=" text-dark fw-medium">Sign Up</a></p>
         </div>
     </div>
 </body>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector("form");
+        const errorDiv = document.getElementById("error");
+
+        if (errorDiv) {
+            const inputs = document.querySelectorAll("input");
+            inputs.forEach(function (input) {
+                input.addEventListener("input", function () {
+                    errorDiv.textContent = "";
+                    errorDiv.classList.add("d-none");
+                });
+            })
+        }
+
+        function removeError(input) {
+            input.classList.remove("is-invalid");
+            const parent = input.parentElement;
+            const errorDiv = parent.querySelector(".invalid-feedback");
+            if (errorDiv) {
+                errorDiv.classList.add("d-none");
+                errorDiv.textContent = "";
+            }
+        }
+
+        function showError(input, message) {
+            const parent = input.parentElement;
+            const errorDiv = parent.querySelector(".invalid-feedback");
+
+            input.classList.add("is-invalid");
+            if (errorDiv) {
+                errorDiv.textContent = message;
+                errorDiv.classList.remove("d-none");
+            }
+        }
+
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const name = document.getElementById("floatingName");
+            const password = document.getElementById("floatingPassword");
+
+            let hasError = false;
+
+            [name, password].forEach(removeError);
+
+            if (!name.value.trim()) {
+                showError(name, "Pharmacy name is required!");
+                hasError = true;
+            } 
+
+            if (!password.value.trim()) {
+                showError(password, "Password is required!");
+                hasError = true;
+            }
+
+            if (!hasError) {
+                form.submit();
+            }
+        });
+    });
+</script>  
 
 </html>
