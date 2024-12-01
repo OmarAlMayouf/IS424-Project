@@ -8,12 +8,9 @@ class Product(models.Model):
     quantity = models.PositiveIntegerField()
     expiration_date = models.DateField()
     picture = models.URLField(null=True)
-    def __str__(self):
-        return self.name
+    pharmacy = models.ForeignKey('PharmacyInstance', on_delete=models.CASCADE, related_name='products', null=True)
 class PharmacyInstance(models.Model):
     names = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
     phonenumber = models.CharField(max_length=10,primary_key=True)
     password = models.CharField(max_length=128) 
-    def __str__(self):
-        return self.phonenumber

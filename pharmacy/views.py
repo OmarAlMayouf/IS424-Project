@@ -1,7 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import login, logout
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
 from .models import *
 
 #Placeholder for your comment
@@ -26,13 +24,8 @@ def signup(request):
                 'email_error': email_error,
                 'phone_error': phone_error,
             })
-            
-        PharmacyInstance.objects.create(
-            names=names,
-            email=email,
-            phonenumber=phonenumber,
-            password=password
-        )
+        
+        PharmacyInstance.objects.create(names=names, email=email, phonenumber=phonenumber, password=password)
         return redirect('login')
     return render(request, 'pharmacy/signup.html')
 
@@ -43,50 +36,54 @@ def login_view(request):
         try:
             pharmacy = PharmacyInstance.objects.get(names=pharmacy_name)
             if pharmacy.password == password :
-                # Login successful, redirect to a protected page
-                request.session['pharmacy_id'] = pharmacy.phonenumber  # Store pharmacy in the session
+                request.session['pharmacy_id'] = pharmacy.phonenumber
                 return redirect('read_product')
             else:
-                return render(request, 'pharmacy/login.html', {
-                    'error': 'Invalid Name or password. Please try again.'})
+                return render(request, 'pharmacy/login.html', {'error': 'Invalid Name or password. Please try again.'})
         except PharmacyInstance.DoesNotExist:
-            return render(request, 'pharmacy/login.html', {
-                'error': 'Invalid Name or password. Please try again.'})
-    else:
-        return render(request, 'pharmacy/login.html', {'error': None})
+            return render(request, 'pharmacy/login.html', {'error': 'Invalid Name or password. Please try again.'})
+    return render(request, 'pharmacy/login.html', {'error': None})
 
 def logout_view(request):
     logout(request)
     return redirect('login')
 
-#@login_required
 def read_product(request):
-    products = Product.objects.all()
+    pharmacy_id = request.session.get('pharmacy_id')
+    if not pharmacy_id:
+        return redirect('login')
+
+    pharmacy = get_object_or_404(PharmacyInstance, phonenumber=pharmacy_id)
+
+    products = Product.objects.filter(pharmacy=pharmacy)
     return render(request, 'pharmacy/read_product.html', {'products': products})
 
-#@login_required
+
 def create_product(request):
+    pharmacy_id = request.session.get('pharmacy_id')
+    if not pharmacy_id:
+        return redirect('login')
     if request.method == 'POST':
-        name = request.POST['name']
-        description = request.POST['description']
-        price = request.POST['price']
-        stock_quantity = request.POST['stock_quantity']
-        expiration_date = request.POST['expiration_date']
-        picture = request.POST['url']
+
         Product.objects.create(
-            name=name,
-            description=description,
-            price=price,
-            quantity=stock_quantity,
-            expiration_date=expiration_date,
-            picture=picture,
+            name = request.POST['name'],
+            description = request.POST['description'],
+            price = request.POST['price'],
+            quantity = request.POST['stock_quantity'],
+            expiration_date = request.POST['expiration_date'],
+            picture = request.POST['url'],
+            pharmacy = get_object_or_404(PharmacyInstance, phonenumber=pharmacy_id)
         )
         return redirect('read_product')
     return render(request, 'pharmacy/create_product.html')
 
-#@login_required
 def update_product(request, id):
-    product = get_object_or_404(Product, id=id)
+    pharmacy_id = request.session.get('pharmacy_id')
+    if not pharmacy_id:
+        return redirect('login')
+    pharmacy = get_object_or_404(PharmacyInstance, phonenumber=pharmacy_id)
+    product = get_object_or_404(Product, id=id, pharmacy=pharmacy)
+    
     if request.method == 'POST':
         product.name = request.POST['name']
         product.description = request.POST['description']
@@ -98,30 +95,31 @@ def update_product(request, id):
         return redirect('read_product')
     return render(request, 'pharmacy/update_product.html', {'product': product})
 
-#@login_required
 def delete_product(request, id):
-    product = get_object_or_404(Product, id=id)
+    pharmacy_id = request.session.get('pharmacy_id')
+    if not pharmacy_id:
+        return redirect('login')
+    pharmacy = get_object_or_404(PharmacyInstance, phonenumber=pharmacy_id)
+    product = get_object_or_404(Product, id=id, pharmacy=pharmacy)
+    
     if request.method == 'POST':
         product.delete()
         return redirect('read_product')
     return render(request, 'pharmacy/delete_product.html', {'product': product})
 
-#@login_required
 def view_product(request, id):
-    product = get_object_or_404(Product, id=id)
+    pharmacy_id = request.session.get('pharmacy_id')
+    if not pharmacy_id:
+        return redirect('login')
+    pharmacy = get_object_or_404(PharmacyInstance, phonenumber=pharmacy_id)
+    product = get_object_or_404(Product, id=id, pharmacy=pharmacy)
     return render(request, 'pharmacy/view_product.html', {'product': product})
 
-#@login_required
 def search_medicines(request):
-    """
-    View to handle medicine search functionality.
-    Returns only the names of the medicines matching the query (case-insensitive).
-    """
-    query = request.GET.get('query', '').strip()  # Get and clean the search query
+    query = request.GET.get('query', '').strip()
     results = []
 
     if query:
-        # Perform a case-insensitive search and retrieve required fields
         results = Product.objects.filter(
             name__icontains=query
         ).values('id', 'name','picture')
